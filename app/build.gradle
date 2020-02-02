@@ -4,6 +4,8 @@ apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
 
+apply plugin: 'kotlin-kapt'
+
 android {
     compileSdkVersion 29
     buildToolsVersion "29.0.2"
@@ -29,6 +31,16 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+
+    androidExtensions {
+        experimental = true
+    }
+
+    if (project.hasProperty('devBuild')) {
+        aaptOptions.cruncherEnabled = false
+        splits.abi.enable = false
+        splits.density.enable = false
+    }
 }
 
 dependencies {
@@ -43,6 +55,19 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
     implementation 'androidx.navigation:navigation-fragment-ktx:2.2.0'
     implementation 'androidx.navigation:navigation-ui-ktx:2.2.0'
+
+    //gson & retrofit
+    implementation 'com.google.code.gson:gson:2.8.6'
+    implementation 'com.squareup.okhttp3:okhttp:4.2.0'
+    implementation 'com.squareup.retrofit2:retrofit:2.6.2'
+    implementation 'com.squareup.retrofit2:converter-gson:2.6.2'
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.2.0'
+
+    //workmanager & livedata
+    implementation 'androidx.work:work-runtime-ktx:2.3.0'
+    implementation "androidx.lifecycle:lifecycle-livedata:2.2.0"
+    kapt "androidx.lifecycle:lifecycle-common-java8:2.2.0"
+
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
