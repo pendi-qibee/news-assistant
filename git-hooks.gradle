@@ -1,12 +1,15 @@
+/**
+ * Adapted from https://proandroiddev.com/ooga-chaka-git-hooks-to-enforce-code-quality-11ce8d0d23cb
+ */
+
 static def isLinuxOrMacOs() {
     def osName = System.getProperty('os.name').toLowerCase(Locale.ROOT)
     return osName.contains('linux') || osName.contains('mac os') || osName.contains('macos')
 }
 
 task copyGitHooks(type: Copy) {
-    description 'Copies the git hooks from team-props/git-hooks to the .git folder.'
-//    from("${rootDir}/team-props/git-hooks/") {
-    from("${rootDir}/git-hooks/") {
+    description 'Copies the git hooks from script/git-hooks to the .git folder.'
+    from("${rootDir}/script/git-hooks/") {
         include '**/*.sh'
         rename '(.*).sh', '$1'
     }
@@ -15,18 +18,19 @@ task copyGitHooks(type: Copy) {
 }
 
 task installGitHooks(type: Exec) {
-    description 'Installs the pre-commit git hooks from team-props/git-hooks.'
+    description 'Installs the git hooks from script/git-hooks.'
     group 'git hooks'
     workingDir rootDir
     commandLine 'chmod'
     args '-R', '+x', '.git/hooks/'
     dependsOn copyGitHooks
     onlyIf { isLinuxOrMacOs() }
-    doLast { logger.info('Git hook installed successfully.') }
+    doLast {
+        logger.info('Git hooks installed successfully.')
+    }
 }
 
 afterEvaluate {
     // We install the hook at the first occasion
     tasks['clean'].dependsOn installGitHooks
-    tasks['assemble'].dependsOn installGitHooks
 }
