@@ -34,10 +34,6 @@ allprojects {
     }
 }
 
-task clean(type: Delete) {
-    delete rootProject.buildDir
-}
-
 allprojects {
     apply plugin: "org.jlleitschuh.gradle.ktlint" // Version should be inherited from parent
 
@@ -58,6 +54,10 @@ allprojects {
         jcenter()
 
     }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
 }
 
 apply from: 'git-hooks.gradle'
