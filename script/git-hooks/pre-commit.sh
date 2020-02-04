@@ -2,6 +2,7 @@
 # Adapted from https://proandroiddev.com/ooga-chaka-git-hooks-to-enforce-code-quality-11ce8d0d23cb
 
 echo "Please wait mas Pendi... Checking code formatting"
+echo "copy from git-hooks folder"
 
 ./gradlew app:ktlintCheck --daemon
 
