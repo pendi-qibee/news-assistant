@@ -5,7 +5,7 @@ buildscript {
     repositories {
         google()
         jcenter()
-        
+
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.5.3'
@@ -67,7 +67,3 @@ allprojects {
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
-
-task assemble(dependsOn: rootProject.collect { p ->
-    "$p.name:assemble"
-})

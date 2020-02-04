@@ -3,20 +3,18 @@
  */
 
 static def isLinuxOrMacOs() {
-//    def osName = System.getProperty('os.name').toLowerCase(Locale.ROOT)
-//    def osName = OperatingSystem.isLinux().getProperty('os.name').toLowerCase(Locale.ROOT)
-//    return osName.contains('linux') || osName.contains('mac os') || osName.contains('macos')
-return OperatingSystem.isLinux().booleanValue() || OperatingSystem.isMacOsX().booleanValue()
+    def osName = System.getProperty('os.name').toLowerCase(Locale.ROOT)
+    return osName.contains('linux') || osName.contains('mac os') || osName.contains('macos')
 }
 
 task copyGitHooks(type: Copy) {
     description 'Copies the git hooks from script/git-hooks to the .git folder.'
-    from("${rootDir}/script/git-hooks") {
+    from("${rootDir}/script/git-hooks/") {
         include '**/*.sh'
         rename '(.*).sh', '$1'
     }
-    into "${rootDir}/.git/hooks"
-//    onlyIf { isLinuxOrMacOs() }
+    into "${rootDir}/.git/hooks/"
+    onlyIf { isLinuxOrMacOs() }
 }
 
 task installGitHooks(type: Exec) {
@@ -24,9 +22,9 @@ task installGitHooks(type: Exec) {
     group 'git hooks'
     workingDir rootDir
     commandLine 'chmod'
-    args '-R', '+x', '.git/hooks/'
+    args '-R', '+x', '.git/hooks'
     dependsOn copyGitHooks
-//    onlyIf { isLinuxOrMacOs() }
+    onlyIf { isLinuxOrMacOs() }
     doLast {
         logger.info('Git hooks installed successfully.')
     }
@@ -35,5 +33,4 @@ task installGitHooks(type: Exec) {
 afterEvaluate {
     // We install the hook at the first occasion
     tasks['clean'].dependsOn installGitHooks
-    tasks['assemble'].dependsOn installGitHooks
 }
