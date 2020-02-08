@@ -10,3 +10,6 @@ News Assistant Android App is an android app to show list of Headline news from 
 ## Feature
 * [ ] list of Headline news 
 * [ ] get notification when recent news with specific theme is published
+
+## API Documentation
+https://newsapi.org/docs/endpoints
