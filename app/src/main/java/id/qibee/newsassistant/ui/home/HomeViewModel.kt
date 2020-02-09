@@ -1,13 +1,39 @@
 package id.qibee.newsassistant.ui.home
 
-import androidx.lifecycle.LiveData
+import android.app.Application
+import android.util.Log
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import id.qibee.newsassistant.model.TopHeadlines
+import id.qibee.newsassistant.repository.NewsRepository
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
+import java.io.IOException
 
-class HomeViewModel : ViewModel() {
+class HomeViewModel(app: Application) : AndroidViewModel(app) {
 
-    private val _text = MutableLiveData<String>().apply {
-        value = "This is home Fragment"
+    private val newsRepository = NewsRepository()
+    private val viewModelJob = SupervisorJob()
+    private val viewModelScope = CoroutineScope(viewModelJob + Dispatchers.Main)
+    private var _eventNetworkError = MutableLiveData<Boolean>(false)
+    private var _isNetworkErrorShown = MutableLiveData<Boolean>(false)
+    val newsList = MutableLiveData<TopHeadlines>()
+
+    init {
+        fetchNewsData()
     }
-    val text: LiveData<String> = _text
+
+    private fun fetchNewsData() {
+        viewModelScope.launch {
+            try {
+                newsList.value = newsRepository.fetchNews()
+                _eventNetworkError.value = false
+                _isNetworkErrorShown.value = false
+            } catch (networkError: IOException) {
+                Log.e("errormessage", networkError.toString())
+            }
+        }
+    }
 }
