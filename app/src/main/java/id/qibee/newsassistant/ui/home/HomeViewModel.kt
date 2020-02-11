@@ -3,6 +3,7 @@ package id.qibee.newsassistant.ui.home
 import android.app.Application
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import id.qibee.newsassistant.model.TopHeadlines
 import id.qibee.newsassistant.repository.NewsRepository
@@ -10,6 +11,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
+import timber.log.Timber.d
 import java.io.IOException
 
 class HomeViewModel(app: Application) : AndroidViewModel(app) {
@@ -19,7 +21,10 @@ class HomeViewModel(app: Application) : AndroidViewModel(app) {
     private val viewModelScope = CoroutineScope(viewModelJob + Dispatchers.Main)
     private var _eventNetworkError = MutableLiveData<Boolean>(false)
     private var _isNetworkErrorShown = MutableLiveData<Boolean>(false)
-    val newsList = MutableLiveData<TopHeadlines>()
+    private var _newsList = MutableLiveData<TopHeadlines>()
+
+    val newsList: LiveData<TopHeadlines>
+        get() = _newsList
 
     init {
         fetchNewsData()
@@ -28,7 +33,9 @@ class HomeViewModel(app: Application) : AndroidViewModel(app) {
     private fun fetchNewsData() {
         viewModelScope.launch {
             try {
-                newsList.value = newsRepository.fetchNews()
+                newsRepository.fetchNews()
+                _newsList.value = newsRepository.topHeadlines
+                d(" title --> ${newsRepository.topHeadlines.articles[0].title} ")
                 _eventNetworkError.value = false
                 _isNetworkErrorShown.value = false
             } catch (networkError: IOException) {
