@@ -9,10 +9,10 @@ import kotlinx.coroutines.withContext
 class NewsRepository {
     val apiKey = BuildConfig.API_DEVELOPER_TOKEN
     val country = "id"
-    suspend fun fetchNews(): TopHeadlines? {
+    lateinit var topHeadlines: TopHeadlines
+    suspend fun fetchNews() {
         withContext(Dispatchers.IO) {
-            return@withContext RetrofitBuilder.service.getTopHeadlines(country, apiKey).await()
+            topHeadlines = RetrofitBuilder.service.getTopHeadlines(country, apiKey).await()
         }
-        return null
     }
 }
