@@ -7,12 +7,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import id.qibee.newsassistant.model.TopHeadlines
 import id.qibee.newsassistant.repository.NewsRepository
+import java.io.IOException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import timber.log.Timber.d
-import java.io.IOException
 
 class HomeViewModel(app: Application) : AndroidViewModel(app) {
 
