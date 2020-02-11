@@ -7,9 +7,11 @@ News Assistant Android App is an android app to show list of Headline news from 
 * [Retrofit](http://square.github.io/retrofit/)
 * [Jetpack Navigation component](https://developer.android.com/guide/navigation/navigation-getting-started)
 * [Kotlin Coroutine](https://github.com/Kotlin/kotlinx.coroutines)
+* [Data binding]()
+* [GLide]()
 
 ## Feature
-* [ ] list of Headline news 
+* [X] list of Headline news 
 * [ ] get notification when recent news with specific theme is published
 
 ## API Documentation
