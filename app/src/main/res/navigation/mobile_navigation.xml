@@ -22,4 +22,9 @@
         android:name="id.qibee.newsassistant.ui.notifications.NotificationsFragment"
         android:label="@string/title_subscriptions"
         tools:layout="@layout/fragment_notifications" />
+
+    <fragment
+        android:id="@+id/navigation_setting"
+        android:name="id.qibee.newsassistant.ui.setting.SettingFragment"
+        android:label="Setting" />
 </navigation>
